@@ -116,7 +116,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .kinetic span:nth-child(3n+2) { color: var(--signal); -webkit-text-stroke: 0; }
 
 /* Scrub sequence */
-.scrub { position: relative; height: 430vh; border-bottom: 1px solid var(--line); }
+.scrub { position: relative; height: 220vh; border-bottom: 1px solid var(--line); }
 .scrub-sticky { position: sticky; top: var(--top); height: calc(100vh - var(--top)); height: calc(100svh - var(--top)); overflow: hidden; }
 .scrub canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .scrub-ui { position: relative; height: 100%; display: grid; grid-template-rows: auto 1fr auto; padding-block: 88px 28px; pointer-events: none; }
@@ -354,7 +354,7 @@ body.lock { overflow: hidden; }
             <span class="mono" data-en="How I work · scroll to play">Cómo trabajo · haz scroll</span>
             <h2 class="display" data-en="From raw data to decision">Del dato en bruto a la decisión</h2>
           </div>
-          <div class="counter"><b id="frameNum">001</b><span>FRAME / 150</span></div>
+          <div class="counter"><b id="frameNum">001</b><span>FRAME / 090</span></div>
         </div>
         <div class="steps" id="steps">
           <div class="step on"><span class="mono">01</span><div><b data-en="Raw data">Datos en bruto</b><span data-en="Records from different sources: APIs, ERPs and spreadsheets.">Registros de fuentes distintas: APIs, ERPs y hojas de cálculo.</span></div></div>
@@ -450,22 +450,22 @@ body.lock { overflow: hidden; }
         </div>
 
         <div class="stack-item" style="--i:3">
-          <article class="reel" data-project="strava" tabindex="0" role="button" aria-label="Análisis de entrenamiento">
+          <article class="reel" data-project="strava" tabindex="0" role="button" aria-label="Rendimiento y plan de entrenamiento">
             <div class="frame make-frame">
               <span class="badge mono" data-en="Personal project">Proyecto personal</span>
               <div class="make" data-app="strava"></div>
             </div>
             <div class="reel-body">
               <span class="reel-num">04</span>
-              <span class="reel-cat mono">Strava · Running</span>
-              <h3 data-en="Training analysis">Análisis de entrenamiento</h3>
+              <span class="reel-cat mono">Strava · Claude</span>
+              <h3 data-en="Performance & training plan">Rendimiento y plan de entrenamiento</h3>
               <ul>
-                <li data-en="Pace and heart-rate analysis of my own training.">Ritmo y frecuencia cardíaca de mi propio entrenamiento.</li>
-                <li data-en="Segmented pacing strategy and a max heart-rate test to calibrate zones.">Estrategia de ritmo por tramos y test de frecuencia cardíaca máxima para calibrar zonas.</li>
-                <li data-en="Applied in the XI Carrera El Grupo (12.7 km, Granada).">Aplicado en la XI Carrera El Grupo (12,7 km, Granada).</li>
+                <li data-en="Strava connected to Claude: splits, heart rate and best efforts for every activity.">Strava conectado a Claude: parciales, frecuencia cardíaca y mejores esfuerzos de cada actividad.</li>
+                <li data-en="Race analysis of the XI Carrera El Grupo (12.7 km, ~260 m elevation) with heart-rate zones.">Análisis de la XI Carrera El Grupo (12,7 km, ~260 m de desnivel) por zonas de frecuencia cardíaca.</li>
+                <li data-en="4-week block combining running, strength and plyometrics, built from the data.">Bloque de 4 semanas que combina carrera, fuerza y pliometría, diseñado a partir de los datos.</li>
               </ul>
               <div class="reel-foot">
-                <div class="tags"><span data-en="Time series">Series temporales</span><span>Strava API</span></div>
+                <div class="tags"><span>Strava API</span><span>Claude</span><span data-en="Time series">Series temporales</span></div>
                 <span class="open"><span data-en="View case">Ver caso</span><i>→</i></span>
               </div>
             </div>
@@ -577,11 +577,13 @@ const cases = {
       stack: ["Python", "Prophet", "XGBoost", "Power BI"]
     },
     strava: {
-      cat: "Strava · Proyecto personal", title: "Análisis de entrenamiento",
-      c: "Quería entender mi rendimiento en carrera y diseñar una estrategia de ritmo informada antes de la XI Carrera El Grupo (12,7 km, Granada, ~260 m de desnivel).",
-      a: "Analicé ritmo y frecuencia cardíaca de mis entrenamientos con datos de Strava, diseñé una estrategia de ritmo por tramos y un test progresivo de frecuencia cardíaca máxima para calibrar las zonas.",
-      r: "Carrera completada el 25 de julio aplicando la estrategia diseñada. El mismo enfoque se reutiliza en los siguientes ciclos de entrenamiento.",
-      stack: ["Series temporales", "Visualización", "Strava API"]
+      cat: "Strava · Claude · Proyecto personal", title: "Rendimiento y plan de entrenamiento",
+      c: "Quería entrenar con datos y no con sensaciones: recuperar mi mejor nivel tras la XI Carrera El Grupo (12,7 km y ~260 m de desnivel en Granada), combinando carrera, fuerza y pliometría con un día a la semana sin registro.",
+      a: "Conecté Strava a Claude para analizar cada actividad: parciales por vuelta, frecuencia cardíaca, cadencia y mejores esfuerzos. El análisis mostró que casi todas las carreras acababan por encima de 170 ppm y que había pocos días realmente suaves. Con eso diseñé un bloque de 4 semanas: calidad los lunes, fuerza separada en pierna, empuje y tirón, y tirada larga progresiva por debajo de 150 ppm.",
+      r: "Un plan de entrenamiento basado en datos reales y no en intuiciones, con días suaves de verdad y la intensidad concentrada donde aporta. Los ritmos, las cargas y el volumen se revisan con los datos de Strava cada dos semanas.",
+      flowT: "Cómo funciona",
+      flow: [["01","<b>Sincronización</b> · Polar Pacer Pro › Polar Flow › Strava"],["02","<b>Extracción</b> · historial paginado de actividades conectado a Claude"],["03","<b>Análisis</b> · parciales, FC, cadencia, mejores esfuerzos y esfuerzo relativo"],["04","<b>Diagnóstico</b> · intensidad real de los días suaves y forma anclada a resultados de carrera"],["05","<b>Plan</b> · bloque de 4 semanas con carrera, fuerza y pliometría"],["06","<b>Revisión</b> · ajuste de ritmos, cargas y volumen cada dos semanas"]],
+      stack: ["Strava API", "Claude", "Polar Flow", "Series temporales", "Análisis de FC"]
     }
   },
   en: {
@@ -610,11 +612,13 @@ const cases = {
       stack: ["Python", "Prophet", "XGBoost", "Power BI"]
     },
     strava: {
-      cat: "Strava · Personal project", title: "Training analysis",
-      c: "I wanted to understand my race performance and design an informed pacing strategy ahead of the XI Carrera El Grupo (12.7 km, Granada, ~260 m elevation).",
-      a: "I analysed pace and heart rate from my training with Strava data, designed a segmented pacing strategy and ran a progressive max heart-rate test to calibrate zones.",
-      r: "Race completed on 25 July applying the designed strategy. The same approach is reused in later training cycles.",
-      stack: ["Time series", "Visualisation", "Strava API"]
+      cat: "Strava · Claude · Personal project", title: "Performance & training plan",
+      c: "I wanted to train on data rather than feel: get back to my best level after the XI Carrera El Grupo (12.7 km and ~260 m elevation in Granada), combining running, strength and plyometrics with one unrecorded day a week.",
+      a: "I connected Strava to Claude to analyse every activity: lap splits, heart rate, cadence and best efforts. The analysis showed that almost every run ended above 170 bpm and that there were few truly easy days. From that I designed a 4-week block: quality sessions on Mondays, strength split into legs, push and pull, and a progressive long run below 150 bpm.",
+      r: "A training plan grounded in real data rather than hunches, with genuinely easy days and intensity placed where it pays off. Pace, load and volume are reviewed against Strava data every two weeks.",
+      flowT: "How it works",
+      flow: [["01","<b>Sync</b> · Polar Pacer Pro › Polar Flow › Strava"],["02","<b>Extraction</b> · paginated activity history connected to Claude"],["03","<b>Analysis</b> · splits, HR, cadence, best efforts and relative effort"],["04","<b>Diagnosis</b> · real intensity of easy days, fitness anchored to race results"],["05","<b>Plan</b> · 4-week block with running, strength and plyometrics"],["06","<b>Review</b> · pace, load and volume adjusted every two weeks"]],
+      stack: ["Strava API", "Claude", "Polar Flow", "Time series", "HR analysis"]
     }
   }
 };
@@ -1041,65 +1045,89 @@ const APPS = {
   strava: {
     svg(uid, L) {
       const tx = (es, en) => L === 0 ? es : en;
-      const N = 80, pts = [...Array(N + 1)].map((_, i) => i / N);
-      const ex = t => 40 + t * 880, ey = t => 430 - elevAt(t) * 60, hy = t => 430 - hrAt(t) * 70;
-      const area = `M40 430 ${pts.map(t => `L${ex(t).toFixed(1)} ${ey(t).toFixed(1)}`).join(" ")} L920 430 Z`;
+      const OR = "#FC4C02";
+      const zones = ZC.map((c, i) => `<text x="620" y="${178 + i * 16}" class="m" font-size="9.5" fill="#9BA1A7">Z${i + 1}</text>
+        <rect x="646" y="${171 + i * 16}" width="274" height="8" rx="4" fill="#22262B"/><rect data-r="z${i}" x="646" y="${171 + i * 16}" width="0" height="8" rx="4" fill="${c}"/>`).join("");
+      const N = 90, pts = [...Array(N + 1)].map((_, i) => i / N);
+      const ex = t => 40 + t * 880, ey = t => 412 - elevAt(t) * 70, hy = t => 404 - hrAt(t) * 80;
+      const area = `M40 412 ${pts.map(t => `L${ex(t).toFixed(1)} ${ey(t).toFixed(1)}`).join(" ")} L920 412 Z`;
       const hr = `M${pts.map(t => `${ex(t).toFixed(1)} ${hy(t).toFixed(1)}`).join(" L")}`;
-      const zones = ZC.map((c, i) => `<text x="620" y="${246 + i * 18}" class="m" font-size="10" fill="#9BA1A7">Z${i + 1}</text>
-        <rect x="646" y="${238 + i * 18}" width="270" height="9" rx="4.5" fill="#22262B"/><rect data-r="z${i}" x="646" y="${238 + i * 18}" width="0" height="9" rx="4.5" fill="${c}"/>`).join("");
       return `<svg class="mk ap" viewBox="0 0 960 460" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${BG(uid)}
-        <rect x="20" y="20" width="84" height="28" rx="14" fill="#FC4C02"/><text x="62" y="39" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">${tx("Carrera", "Run")}</text>
-        <text x="118" y="39" font-size="15" font-weight="700" fill="#EDEFEA">XI Carrera El Grupo</text>
-        <text x="920" y="39" text-anchor="end" class="m" font-size="10.5" fill="#9BA1A7">Granada · 25/07/2026</text>
-        <rect x="20" y="62" width="560" height="270" rx="12" fill="#16191D" stroke="#24272D"/>
-        <g fill="none" stroke="#1F2328" stroke-width="7" stroke-linecap="round"><path d="M20 130 L580 150M20 215 L580 240M20 300 L580 285M110 62 L90 332M250 62 L275 332M420 62 L395 332"/></g>
-        <g fill="none" stroke="#1C2024"><path d="M40 200 C 140 160, 240 230, 360 190 S 520 150, 570 170"/><path d="M40 250 C 150 210, 250 280, 370 240 S 520 200, 570 220"/><path d="M60 110 C 160 80, 260 140, 380 100 S 500 80, 570 95"/></g>
-        <path d="${ROUTE}" fill="none" stroke="#FC4C02" stroke-opacity=".28" stroke-width="5" stroke-linecap="round"/>
-        <path data-r="route" d="${ROUTE}" fill="none" stroke="#FC4C02" stroke-width="5" stroke-linecap="round"/>
-        <circle cx="60" cy="290" r="8" fill="#4CC38A" stroke="#16191D" stroke-width="3"/>
-        <circle cx="548" cy="112" r="8" fill="#EDEFEA" stroke="#16191D" stroke-width="3"/>
-        <g data-r="runner"><circle r="14" fill="#FC4C02" opacity=".25"/><circle r="7" fill="#fff" stroke="#FC4C02" stroke-width="3"/></g>
-        <rect x="600" y="62" width="340" height="270" rx="12" fill="#16191D" stroke="#24272D"/>
-        <text x="620" y="90" class="m" font-size="9.5" fill="#7D848B">${tx("DISTANCIA", "DISTANCE")}</text><text data-r="dist" x="620" y="120" font-size="26" font-weight="700" fill="#EDEFEA">0,0 km</text>
-        <text x="780" y="90" class="m" font-size="9.5" fill="#7D848B">${tx("DESNIVEL +", "ELEVATION +")}</text><text data-r="elev" x="780" y="120" font-size="26" font-weight="700" fill="#EDEFEA">0 m</text>
-        <text x="620" y="160" class="m" font-size="9.5" fill="#7D848B">${tx("ZONA FC ACTUAL", "CURRENT HR ZONE")}</text>
-        <rect data-r="zr" x="620" y="170" width="44" height="24" rx="12" fill="#5B8DEF"/><text data-r="zt" x="642" y="186" text-anchor="middle" font-size="12" font-weight="700" fill="#0B0D06">Z1</text>
-        <text data-r="done" x="680" y="187" font-size="12" font-weight="600" fill="#FC4C02" opacity="0">✓ ${tx("Carrera completada", "Race completed")}</text>
-        <text x="620" y="226" class="m" font-size="9.5" fill="#7D848B">${tx("TIEMPO EN ZONAS", "TIME IN ZONES")}</text>
+        <defs><clipPath id="${uid}p"><rect data-r="clip" x="40" y="300" width="0" height="115"/></clipPath><clipPath id="${uid}m"><rect x="20" y="62" width="560" height="200" rx="12"/></clipPath></defs>
+        <rect x="20" y="20" width="80" height="28" rx="14" fill="${OR}"/><text x="60" y="39" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">Strava</text>
+        <path d="M110 34h22" stroke="#4A4F57" stroke-dasharray="3 3"/>
+        <rect x="140" y="20" width="76" height="28" rx="14" fill="#1C1E22" stroke="#3A3F47"/><text x="178" y="39" text-anchor="middle" font-size="12.5" font-weight="600" fill="#EDEFEA">Claude</text>
+        <text data-r="st" x="232" y="39" class="m" font-size="10.5" fill="#9BA1A7"></text>
+        <text x="940" y="39" text-anchor="end" class="m" font-size="10.5" fill="#9BA1A7">XI Carrera El Grupo · Granada</text>
+        <rect x="20" y="62" width="560" height="200" rx="12" fill="#16191D"/>
+        <g clip-path="url(#${uid}m)"><g transform="translate(0 -40)">
+          <g fill="none" stroke="#1F2328" stroke-width="7" stroke-linecap="round"><path d="M20 140 L580 160M20 225 L580 250M20 300 L580 285M110 62 L90 340M250 62 L275 340M420 62 L395 340"/></g>
+          <g fill="none" stroke="#1C2024"><path d="M40 200 C 140 160, 240 230, 360 190 S 520 150, 570 170"/><path d="M40 250 C 150 210, 250 280, 370 240 S 520 200, 570 220"/><path d="M60 120 C 160 90, 260 150, 380 110 S 500 90, 570 105"/></g>
+          <path d="${ROUTE}" fill="none" stroke="${OR}" stroke-opacity=".25" stroke-width="5" stroke-linecap="round"/>
+          <path data-r="route" d="${ROUTE}" fill="none" stroke="${OR}" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="60" cy="290" r="8" fill="#4CC38A" stroke="#16191D" stroke-width="3"/>
+          <circle cx="548" cy="112" r="8" fill="#EDEFEA" stroke="#16191D" stroke-width="3"/>
+          <g data-r="runner"><circle r="14" fill="${OR}" opacity=".25"/><circle r="7" fill="#fff" stroke="${OR}" stroke-width="3"/></g>
+        </g></g>
+        <rect x="20" y="62" width="560" height="200" rx="12" fill="none" stroke="#24272D"/>
+        <rect x="600" y="62" width="340" height="200" rx="12" fill="#16191D" stroke="#24272D"/>
+        <text x="620" y="84" class="m" font-size="9.5" fill="#7D848B">${tx("DISTANCIA", "DISTANCE")}</text><text data-r="dist" x="620" y="110" font-size="24" font-weight="700" fill="#EDEFEA">0,0 km</text>
+        <text x="780" y="84" class="m" font-size="9.5" fill="#7D848B">${tx("DESNIVEL +", "ELEVATION +")}</text><text data-r="elev" x="780" y="110" font-size="24" font-weight="700" fill="#EDEFEA">0 m</text>
+        <text x="620" y="140" class="m" font-size="9.5" fill="#7D848B">${tx("ZONA FC", "HR ZONE")}</text>
+        <rect data-r="zr" x="690" y="128" width="40" height="18" rx="9" fill="#5B8DEF"/><text data-r="zt" x="710" y="141" text-anchor="middle" font-size="11" font-weight="700" fill="#0B0D06">Z1</text>
+        <text data-r="done" x="920" y="141" text-anchor="end" font-size="11.5" font-weight="600" fill="${OR}" opacity="0">✓ ${tx("Completada", "Completed")}</text>
+        <text x="620" y="162" class="m" font-size="9" fill="#5F656C">${tx("TIEMPO EN ZONAS", "TIME IN ZONES")}</text>
         ${zones}
-        <rect x="20" y="344" width="920" height="100" rx="12" fill="#16191D" stroke="#24272D"/>
-        <text x="36" y="364" class="m" font-size="9.5" fill="#7D848B">${tx("ELEVACIÓN · FRECUENCIA CARDÍACA", "ELEVATION · HEART RATE")}</text>
-        <path d="${area}" fill="#2A2F36"/>
-        <path data-r="hr" d="${hr}" fill="none" stroke="#FC4C02" stroke-width="2"/>
-        <path data-r="cur" d="M40 350V436" stroke="#EDEFEA" stroke-width="1.2"/>
+        <rect x="20" y="274" width="920" height="166" rx="12" fill="#16191D" stroke="#24272D"/>
+        <text x="36" y="294" class="m" font-size="9.5" fill="#7D848B">${tx("PERFIL · ELEVACIÓN Y FRECUENCIA CARDÍACA", "PROFILE · ELEVATION & HEART RATE")}</text>
+        <rect x="770" y="285" width="10" height="3" fill="${OR}"/><text x="786" y="291" font-size="10" fill="#9BA1A7">${tx("FC", "HR")}</text>
+        <rect x="830" y="283" width="10" height="7" rx="1" fill="#3A3F47"/><text x="846" y="291" font-size="10" fill="#9BA1A7">${tx("Elevación", "Elevation")}</text>
+        <path d="${area}" fill="#262A30"/>
+        <path data-r="ea" d="${area}" fill="#3A3F47" clip-path="url(#${uid}p)"/>
+        <path d="M40 412H920" stroke="#3A3F47"/>
+        <path d="M480 304V412" stroke="#5F656C" stroke-dasharray="3 4"/>
+        <text x="260" y="316" text-anchor="middle" class="m" font-size="9.5" fill="#7D848B">${tx("VUELTA 1", "LAP 1")}</text>
+        <text x="700" y="316" text-anchor="middle" class="m" font-size="9.5" fill="#7D848B">${tx("VUELTA 2", "LAP 2")}</text>
+        ${[0, 2, 4, 6, 8, 10].map(k => `<text x="${40 + k / 12.7 * 880}" y="428" text-anchor="middle" class="m" font-size="9" fill="#5F656C">${k}</text>`).join("")}
+        <text x="920" y="428" text-anchor="end" class="m" font-size="9" fill="#5F656C">12,7 km</text>
+        <path data-r="hr" d="${hr}" fill="none" stroke="${OR}" stroke-width="2.2" stroke-linejoin="round"/>
+        <path data-r="cur" d="M40 300V412" stroke="#EDEFEA" stroke-width="1.2"/>
+        <circle data-r="hd" r="4.5" fill="#fff" stroke="${OR}" stroke-width="2.5"/>
       </svg>`;
     },
     async run(svg, h, L) {
-      const r = k => svg.querySelector(`[data-r="${k}"]`);
-      const route = r("route"), len = route.getTotalLength(), hr = r("hr"), hl = hr.getTotalLength();
+      const r = k => svg.querySelector(`[data-r="${k}"]`), tx = (es, en) => L === 0 ? es : en;
+      const route = r("route"), len = route.getTotalLength(), hp = r("hr"), hl = hp.getTotalLength();
       const counts = [0, 0, 0, 0, 0], fmt = v => L === 0 ? v.toFixed(1).replace(".", ",") : v.toFixed(1);
       const set = t => {
         const p = route.getPointAtLength(t * len);
         r("runner").setAttribute("transform", `translate(${p.x} ${p.y})`);
         route.style.strokeDasharray = `${len} ${len}`; route.style.strokeDashoffset = len * (1 - t);
-        hr.style.strokeDasharray = `${hl} ${hl}`; hr.style.strokeDashoffset = hl * (1 - t);
-        const x = 40 + t * 880; r("cur").setAttribute("d", `M${x} 350V436`);
+        hp.style.strokeDasharray = `${hl} ${hl}`; hp.style.strokeDashoffset = hl * (1 - t);
+        const x = 40 + t * 880, hpnt = hp.getPointAtLength(t * hl);
+        r("cur").setAttribute("d", `M${x} 300V412`); r("clip").setAttribute("width", t * 880);
+        r("hd").setAttribute("cx", hpnt.x); r("hd").setAttribute("cy", hpnt.y);
         r("dist").textContent = fmt(t * 12.7) + " km";
         r("elev").textContent = Math.round(clamp((elevAt(t) - elevAt(0)) / (elevAt(1) - elevAt(0))) * 260) + " m";
         const z = clamp(Math.floor((hrAt(t) - .42) / .11), 0, 4);
         r("zr").setAttribute("fill", ZC[z]); r("zt").textContent = "Z" + (z + 1);
         return z;
       };
-      counts.fill(0); set(0); r("done").setAttribute("opacity", 0); ZC.forEach((_, i) => r("z" + i).setAttribute("width", 0));
+      set(0); r("done").setAttribute("opacity", 0); ZC.forEach((_, i) => r("z" + i).setAttribute("width", 0));
+      r("st").textContent = tx("Analizando actividad…", "Analysing activity…");
       await h.sleep(600);
+      // 1 · race replay
       let last = 0;
-      await h.tween(7500, t => {
+      await h.tween(7000, t => {
         const z = set(t); counts[z] += t - last; last = t;
         const mx = Math.max(...counts) || 1;
-        counts.forEach((c, i) => r("z" + i).setAttribute("width", 270 * c / mx));
+        counts.forEach((c, i) => r("z" + i).setAttribute("width", 274 * c / mx));
       });
       r("done").setAttribute("opacity", 1);
-      await h.sleep(3000);
+      counts.fill(0);
+      await h.sleep(500);
+      r("st").textContent = "✓ " + tx("Actividad analizada", "Activity analysed");
+      await h.sleep(3600);
     }
   }
 };
@@ -1131,7 +1159,7 @@ document.querySelectorAll("[data-app]").forEach(h => appCanvas(h, h.dataset.app)
 /* ---------- Image sequence scrub ---------- */
 const scrub = (() => {
   const sec = $("proceso"), cv = $("scrubCanvas"), ctx = cv.getContext("2d");
-  const F = 150, N = 360;
+  const F = 90, N = 300;
   let seed = 7; const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
   const P = Array.from({ length: N }, () => ({ sx: rnd() * 1.25 - .12, sy: rnd() * 1.3 - .15, d: rnd(), ph: rnd() * 6.28 }));
   const vals = [40, 46, 43, 52, 58, 55, 63, 70, 66, 75, 82, 86], fc = [90, 93, 97, 101];
@@ -1212,7 +1240,7 @@ const scrub = (() => {
     }
   }
   function tick() {
-    cur += (target - cur) * .1;
+    cur += (target - cur) * .16;
     if (Math.abs(target - cur) < .0005) cur = target;
     const fr = Math.round(cur * (F - 1));
     if (fr !== lastFrame || dirty) {
