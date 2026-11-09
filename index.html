@@ -371,6 +371,7 @@ const $ = id => document.getElementById(id);
 const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const smooth = t => t * t * (3 - 2 * t);
 let lang = "es";
 
 /* ---------- 3D story scene ---------- */
@@ -464,8 +465,13 @@ let lang = "es";
   function readScroll() {
     const y = scrollY, top = story.offsetTop, h = story.offsetHeight - innerHeight;
     if (y < top) fGoal = clamp(y / Math.max(top, 1));
-    else fGoal = 1 + clamp((y - top) / Math.max(h, 1)) * 4.2;
-    fGoal = Math.min(fGoal, 5);
+    else {
+      // Each chapter owns one fifth of the scroll and holds its shape; the morph happens in a short
+      // window centred on the boundary, exactly where the text panel changes.
+      const x = clamp((y - top) / Math.max(h, 1)) * 5;
+      fGoal = 1;
+      for (let b = 1; b <= 4; b++) fGoal += smooth(clamp((x - b + .14) / .28));
+    }
     const s = clamp((y - top) / Math.max(h, 1)), ch = Math.min(4, Math.floor(s * 5));
     if (ch !== lastCh) { panels.forEach((p, i) => p.classList.toggle("on", i === ch)); $("chNum").textContent = `0${ch + 1} / 05`; lastCh = ch; }
     bars.forEach((b, i) => b.style.transform = `scaleX(${clamp(s * 5 - i)})`);
@@ -477,7 +483,7 @@ let lang = "es";
   const clock = new THREE.Clock();
   function loop() {
     const time = clock.getElapsedTime();
-    f += (fGoal - f) * .075;
+    f += (fGoal - f) * .16; if (Math.abs(fGoal - f) < .002) f = fGoal;
     const fa = Math.floor(f), fb = Math.min(5, fa + 1), fr = f - fa;
     mxs += (mx - mxs) * .05; mys += (my - mys) * .05;
     // framing: shape sits right of the text on desktop, above it on phones
@@ -492,7 +498,7 @@ let lang = "es";
     if (mouseOn) { mv.set(mx, my); ray.setFromCamera(mv, camera); if (ray.ray.intersectPlane(plane, hit)) { group.worldToLocal(hit); hx = hit.x; hy = hit.y; } }
     for (let i = 0; i < N; i++) {
       const b = i * 3;
-      const t = ease(clamp((fr - delay[i] * .35) / .65));
+      const t = ease(clamp((fr - delay[i] * .2) / .8));
       target(fa, i, time, A); target(fb, i, time, B);
       const Fa = FORMS[fa], Fb = FORMS[fb];
       const tx = lerp(A[0], B[0], t), ty = lerp(A[1], B[1], t), tz = lerp(A[2], B[2], t);
