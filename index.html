@@ -238,23 +238,21 @@ body.lock { overflow: hidden; }
 }
 @media (max-width: 420px) { .pill.dark { display: none; } }
 
-/* Reduced motion: no particle canvas, the story becomes a static list of chapters */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  #stage { display: none; }
-  .hero h1 > span { animation: none; transform: none; }
-  .scroll-cue b, .live i { animation: none; }
-  .hero { padding-top: 140px; align-items: flex-end; min-height: 0; }
-  .hero-copy { max-width: none; }
-  .story { height: auto; }
-  .story-sticky { position: static; height: auto; pointer-events: auto; }
-  .story-ui { display: block; padding-block: 40px 20px; }
-  .panels { display: grid; gap: 14px; max-width: 760px; min-height: 0; }
-  .panel { position: static; opacity: 1; transform: none; transition: none; background: var(--surface); border-radius: 22px; }
-  .chapters { display: none; }
-  .card, .card.pre { transition: none; opacity: 1; transform: none; }
-  .mk-link.hot, .mk-mod.lit .mk-pulse { animation: none; }
-}
+/* Motion off (system preference or the nav switch): no particle canvas, the story becomes a static list of chapters */
+html.still { scroll-behavior: auto; }
+.still #stage { display: none; }
+.still .hero h1 > span { animation: none; transform: none; }
+.still .scroll-cue b, .still .live i { animation: none; }
+.still .hero { padding-top: 140px; align-items: flex-end; min-height: 0; }
+.still .hero-copy { max-width: none; }
+.still .story { height: auto; }
+.still .story-sticky { position: static; height: auto; pointer-events: auto; }
+.still .story-ui { display: block; padding-block: 40px 20px; }
+.still .panels { display: grid; gap: 14px; max-width: 760px; min-height: 0; }
+.still .panel { position: static; opacity: 1; transform: none; transition: none; background: var(--surface); border-radius: 22px; }
+.still .chapters { display: none; }
+.still .card, .still .card.pre { transition: none; opacity: 1; transform: none; }
+.still .mk-link.hot, .still .mk-mod.lit .mk-pulse { animation: none; }
 </style>
 </head>
 <body>
@@ -458,7 +456,7 @@ const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 const smooth = t => t * t * (3 - 2 * t);
-const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const REDUCED = false; // animations always load, whatever the system setting
 let lang = "es";
 
 /* ---------- Story: scroll position → chapter (shared by text and particles) ---------- */
@@ -482,11 +480,17 @@ chBtns.forEach(b => b.addEventListener("click", () => {
 }));
 
 /* ---------- Particle scene ---------- */
-(function () {
+// Built on first use; a failure here (no WebGL, no library) only hides the canvas and never stops the rest of the page.
+let sceneState = "idle";
+function startScene() {
+  if (sceneState !== "idle" || REDUCED) return;
+  try { buildScene(); sceneState = "on"; }
+  catch (err) { sceneState = "failed"; const c = $("stage"); if (c) c.style.display = "none"; console.warn("Particle scene unavailable:", err); }
+}
+function buildScene() {
   const canvas = $("stage");
-  if (REDUCED || !window.THREE) { canvas.remove(); return; }
-  let renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); } catch (_) { canvas.remove(); return; }
+  if (!window.THREE) throw new Error("three.js did not load");
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(38, 1, .1, 100);
@@ -585,7 +589,7 @@ chBtns.forEach(b => b.addEventListener("click", () => {
   const clock = new THREE.Clock();
   function loop() {
     requestAnimationFrame(loop);
-    if (document.hidden || opacity <= 0) return; // nothing to paint
+    if (REDUCED || document.hidden || opacity <= 0) return; // nothing to paint
     const time = clock.getElapsedTime();
     f += (fGoal - f) * .16; if (Math.abs(fGoal - f) < .002) f = fGoal;
     const fa = Math.floor(f), fb = Math.min(5, fa + 1), fr = f - fa;
@@ -615,7 +619,7 @@ chBtns.forEach(b => b.addEventListener("click", () => {
     renderer.render(scene, camera);
   }
   requestAnimationFrame(loop);
-})();
+}
 
 /* ---------- Tool canvases ---------- */
 /* ---------- Make scenario canvas ---------- */
@@ -1075,7 +1079,7 @@ const seen = "IntersectionObserver" in window ? new IntersectionObserver(es => e
 document.querySelectorAll(".card [data-app]").forEach(h => { const inst = appCanvas(h, h.dataset.app); if (seen) { inst.visible = false; h._inst = inst; seen.observe(h); } });
 
 /* ---------- Card entrance: once, only for cards that start below the fold ---------- */
-if (!REDUCED && "IntersectionObserver" in window) {
+if (!REDUCED && "IntersectionObserver" in window) { // entrance runs once, on load
   const cards = [...document.querySelectorAll("#trabajo .card")].filter(c => c.getBoundingClientRect().top > innerHeight);
   cards.forEach(c => c.classList.add("pre"));
   const enter = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.remove("pre"); enter.unobserve(e.target); } }), { threshold: .12 });
@@ -1212,6 +1216,9 @@ function setLang(l) {
   if (current) fill(current);
 }
 $("lang").addEventListener("click", () => setLang(lang === "es" ? "en" : "es"));
+
+/* ---------- Start: animations always load ---------- */
+startScene();
 
 /* ---------- Copy email ---------- */
 $("copy").addEventListener("click", e => {
